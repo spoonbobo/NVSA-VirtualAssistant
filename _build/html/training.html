@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Training &mdash; NVIDIA SA Virtual Assistant 1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Deploy" href="deploy.html" />
+    <link rel="prev" title="Prerequisites" href="prereq.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> NVIDIA SA Virtual Assistant
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="arch.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prereq.html">Prerequisites</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Training</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#tao-mounts">1. TAO Mounts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#specification-files">2. Specification files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-preparation">3. Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-format-conversion">4. Data Format Conversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#training-configurations">5. Training configurations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-training">6. Model training</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deploy.html">Deploy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frontend.html">Frontend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="samples.html">Sample Applications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NVIDIA SA Virtual Assistant</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Training</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/training.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="training">
+<span id="id1"></span><h1>Training<a class="headerlink" href="#training" title="Permalink to this headline">¶</a></h1>
+<p>This section describes how we can use TAO toolkit to train text classification models which enables Virtual Assistant to answer questions from queries.</p>
+<div class="section" id="tao-mounts">
+<h2>1. TAO Mounts<a class="headerlink" href="#tao-mounts" title="Permalink to this headline">¶</a></h2>
+<p>Create <code class="file docutils literal notranslate"><span class="pre">.tao_mounts.json</span></code> to configure the mount destinations for TAO toolkit.</p>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>$ vim ~/.tao_mounts.json
+</pre></div>
+</div>
+<p>Specify <code class="code docutils literal notranslate"><span class="pre">&quot;Mounts&quot;</span></code> in <code class="file docutils literal notranslate"><span class="pre">.tao_mounts.json</span></code>:</p>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+        <span class="s2">&quot;Mounts&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">local</span> <span class="n">data</span> <span class="n">folder</span><span class="o">&gt;</span><span class="p">,</span>
+                        <span class="s2">&quot;destination&quot;</span><span class="p">:</span> <span class="s2">&quot;/data&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">local</span> <span class="n">specs</span> <span class="n">folder</span><span class="o">&gt;</span><span class="p">,</span>
+                        <span class="s2">&quot;destination&quot;</span><span class="p">:</span> <span class="s2">&quot;/specs&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">local</span> <span class="n">results</span> <span class="n">folder</span><span class="o">&gt;</span><span class="p">,</span>
+                        <span class="s2">&quot;destination&quot;</span><span class="p">:</span> <span class="s2">&quot;/results&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">local</span> <span class="n">folder</span><span class="o">/.</span><span class="n">cache</span><span class="o">&gt;</span><span class="p">,</span>
+                        <span class="s2">&quot;destination&quot;</span><span class="p">:</span> <span class="s2">&quot;/root/.cache&quot;</span>
+                <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;DockerOptions&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;shm_size&quot;</span><span class="p">:</span> <span class="s2">&quot;16G&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ulimits&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;memlock&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="s2">&quot;stack&quot;</span><span class="p">:</span> <span class="mi">67108864</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="specification-files">
+<h2>2. Specification files<a class="headerlink" href="#specification-files" title="Permalink to this headline">¶</a></h2>
+<p>Download specification files which contain parameter configurations for subtasks in the training pipeline, including training, evaluating, and exporting the model.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ tao text_classification download_specs -r /results/text_classification/default_specs/ <span class="se">\</span>
+                                         -o /specs/nlp/text_classification
+</pre></div>
+</div>
+</div>
+<div class="section" id="data-preparation">
+<h2>3. Data Preparation<a class="headerlink" href="#data-preparation" title="Permalink to this headline">¶</a></h2>
+<p><code class="file docutils literal notranslate"><span class="pre">nlu.yml</span></code> stores the training data of text classification model, which has the format like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nlu</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">intent</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">intent1</span>
+    <span class="nt">examples</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+        <span class="no">- utterance 1</span>
+        <span class="no">- utterance 2</span>
+        <span class="no">- utterance 3</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">intent</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">intent2</span>
+    <span class="nt">examples</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+        <span class="no">- utterance 1</span>
+        <span class="no">- utterance 2</span>
+        <span class="no">- utterance 3</span>
+
+    <span class="l l-Scalar l-Scalar-Plain">....</span>
+</pre></div>
+</div>
+<p>Create <code class="file docutils literal notranslate"><span class="pre">nlu.yml</span></code> under <code class="file docutils literal notranslate"><span class="pre">&lt;local</span> <span class="pre">data</span> <span class="pre">folder&gt;/domain/text_classification/</span></code>:</p>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>$ mkdir -p &lt;local data folder&gt;/domain/text_classification/
+$ vim &lt;local data folder&gt;/domain/text_classification/nlu.yml
+</pre></div>
+</div>
+<p>Let’s add sample intents in <code class="file docutils literal notranslate"><span class="pre">nlu.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nlu</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">intent</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ask_dgx_a100_pcie_gen4</span>
+    <span class="nt">examples</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+        <span class="no">- pci express dgx a100</span>
+        <span class="no">- PCIe bandth</span>
+        <span class="no">- PCI switch infrastructure</span>
+        <span class="no">- PCIe gen4</span>
+        <span class="no">- dgxa100 pcie</span>
+        <span class="no">- dgxa100 switch infrastructure</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">intent</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ask_dgx_a100_m2_nvme_boot_replace</span>
+    <span class="nt">examples</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+        <span class="no">- replace boot drive dgx a100</span>
+        <span class="no">- change drive for boot dgx a100</span>
+        <span class="no">- steps to replace boot drive for dgx a100</span>
+        <span class="no">- replace nvme for dgx a100 start up</span>
+        <span class="no">- m2 nvme on dgx a100 boot replace</span>
+        <span class="no">- detach dgx a100 boot drive</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">intent</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ask_dgx_a100_upgrade_dimm</span>
+    <span class="nt">examples</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+        <span class="no">- additional dimms dgx a100</span>
+        <span class="no">- add dimms dgx a100</span>
+        <span class="no">- 16 additional dual-inline memory modules</span>
+        <span class="no">- how to add dimms</span>
+        <span class="no">- how to upgrade diims</span>
+        <span class="no">- upgrade diims</span>
+        <span class="no">- extra dimms</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">intent</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ask_dgx_air_gapped</span>
+    <span class="nt">examples</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+        <span class="no">- dgx installation isolated from networks</span>
+        <span class="no">- air-gapped dgx systems</span>
+        <span class="no">- air-gapped for security dgx</span>
+        <span class="no">- isolated dgx systems</span>
+        <span class="no">- update software on airgapped dgx systems</span>
+        <span class="no">- how to update packages on dgx using over-the-network method</span>
+        <span class="no">- air gapped dgx over the network</span>
+</pre></div>
+</div>
+<p>Feel free to add your intents and sample data into your own <code class="file docutils literal notranslate"><span class="pre">nlu.yml</span></code>.</p>
+</div>
+<div class="section" id="data-format-conversion">
+<h2>4. Data Format Conversion<a class="headerlink" href="#data-format-conversion" title="Permalink to this headline">¶</a></h2>
+<p><code class="file docutils literal notranslate"><span class="pre">convert_yaml.py</span></code> converts <code class="file docutils literal notranslate"><span class="pre">nlu.yml</span></code> into TAO training format. For simplicity, create this script at the same location with <code class="file docutils literal notranslate"><span class="pre">nlu.yml</span></code>.</p>
+<p><code class="file docutils literal notranslate"><span class="pre">convert_yaml.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">from</span> <span class="nn">yaml</span> <span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">dump</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">yaml</span> <span class="kn">import</span> <span class="n">CLoader</span> <span class="k">as</span> <span class="n">Loader</span><span class="p">,</span> <span class="n">CDumper</span> <span class="k">as</span> <span class="n">Dumper</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">yaml</span> <span class="kn">import</span> <span class="n">Loader</span><span class="p">,</span> <span class="n">Dumper</span>
+
+<span class="k">def</span> <span class="nf">process_text_tc</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;[\(\[].*?[\)\]]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">read_yaml</span><span class="p">(</span><span class="n">yamlFile</span><span class="p">,</span> <span class="n">taskName</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">yamlFile</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="n">taskName</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">convert_yaml</span><span class="p">(</span><span class="n">dataDir</span><span class="p">,</span> <span class="n">yamlFileList</span><span class="p">,</span> <span class="n">resTrainPath</span><span class="p">,</span> <span class="n">resValPath</span><span class="p">,</span> <span class="n">labelPath</span><span class="p">,</span> <span class="n">trainRatio</span><span class="p">,</span> <span class="n">shuffleData</span><span class="p">):</span>
+
+    <span class="nb">open</span><span class="p">(</span><span class="n">resTrainPath</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="nb">open</span><span class="p">(</span><span class="n">resValPath</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="nb">open</span><span class="p">(</span><span class="n">labelPath</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">yamlFile</span> <span class="ow">in</span> <span class="n">yamlFileList</span><span class="p">:</span>
+        <span class="n">yamlFilePath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataDir</span><span class="p">,</span> <span class="n">yamlFile</span><span class="p">,</span> <span class="s2">&quot;nlu.yml&quot;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">+=</span> <span class="n">read_yaml</span><span class="p">(</span><span class="n">yamlFilePath</span><span class="p">,</span> <span class="s1">&#39;nlu&#39;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">resTrainPath</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">train_f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">resValPath</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">val_f</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">labelPath</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">label_f</span><span class="p">:</span>
+                <span class="n">trainData</span><span class="p">,</span> <span class="n">valData</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">intentIdx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
+                    <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">intentIdx</span><span class="p">][</span><span class="s2">&quot;intent&quot;</span><span class="p">])</span>
+                    <span class="n">examples</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">intentIdx</span><span class="p">][</span><span class="s1">&#39;examples&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">examplesNoDash</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">process_text_tc</span><span class="p">,</span> <span class="n">examples</span><span class="p">))[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">numTrainData</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">examplesNoDash</span><span class="p">)</span> <span class="o">*</span> <span class="n">trainRatio</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">expIdx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">examplesNoDash</span><span class="p">)):</span>
+                        <span class="n">line</span> <span class="o">=</span> <span class="n">examplesNoDash</span><span class="p">[</span><span class="n">expIdx</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">intentIdx</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">expIdx</span> <span class="o">&lt;</span> <span class="n">numTrainData</span><span class="p">:</span>
+                            <span class="n">trainData</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">valData</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">shuffleData</span><span class="p">:</span>
+                    <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">trainData</span><span class="p">)</span>
+                    <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">valData</span><span class="p">)</span>
+                <span class="n">label_f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span>
+                <span class="n">train_f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">trainData</span><span class="p">))</span>
+                <span class="n">val_f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">valData</span><span class="p">))</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--dd&quot;</span><span class="p">,</span> <span class="s2">&quot;--data_dir&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;path to data dir&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--yf&quot;</span><span class="p">,</span> <span class="s2">&quot;--yaml_file&quot;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;path to yaml file&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--tm&quot;</span><span class="p">,</span> <span class="s2">&quot;--train_manifest&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;result train manifest&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--vm&quot;</span><span class="p">,</span> <span class="s2">&quot;--val_manifest&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;result val manifest&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--lb&quot;</span><span class="p">,</span> <span class="s2">&quot;--label_file&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;label file&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--tr&quot;</span><span class="p">,</span> <span class="s2">&quot;--train_ratio&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;train manifest ratio&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--shuffle&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;shuffle data&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">dd</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;no data dir is specified. set current folder as default.&quot;</span><span class="p">)</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">dd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">yf</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;you must provide at least 1 yaml file to use this script.&quot;</span><span class="p">)</span>
+        <span class="nb">exit</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">tm</span><span class="p">:</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">tm</span> <span class="o">=</span> <span class="s2">&quot;train.tsv&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">vm</span><span class="p">:</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">vm</span> <span class="o">=</span> <span class="s2">&quot;val.tsv&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">lb</span><span class="p">:</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">lb</span> <span class="o">=</span> <span class="s1">&#39;labels.csv&#39;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">tr</span><span class="p">:</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">tr</span> <span class="o">=</span> <span class="mf">0.8</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">shuffle</span><span class="p">:</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">shuffle</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="n">convert_yaml</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">dd</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">yf</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">tm</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">vm</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">lb</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">tr</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">shuffle</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The syntax of <code class="file docutils literal notranslate"><span class="pre">convert_yaml.py</span></code> is as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python3 convert_yaml.py --dd &lt;<span class="nb">local</span> data folder&gt; --yf &lt;folder to store nlu.yml&gt; --tr &lt;train-val-split ratio&gt; --shuffle
+</pre></div>
+</div>
+<p>Use <code class="file docutils literal notranslate"><span class="pre">convert_yaml.py</span></code> to convert our <code class="file docutils literal notranslate"><span class="pre">nlu.yml</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python3 convert_yaml.py --dd &lt;<span class="nb">local</span> data folder&gt; --yf domain/text_classification --tr <span class="m">0</span>.8 --shuffle
+</pre></div>
+</div>
+<p>You should see <code class="file docutils literal notranslate"><span class="pre">train.tsv</span></code>, <code class="file docutils literal notranslate"><span class="pre">val.tsv</span></code>, and <code class="file docutils literal notranslate"><span class="pre">labels.csv</span></code> are generated in the current folder. For TAO training format for text_classification task, please check <a class="reference external" href="https://docs.nvidia.com/tao/tao-toolkit/text/nlp/text_classification.html">TAO Toolkit Text Classification</a>.</p>
+</div>
+<div class="section" id="training-configurations">
+<h2>5. Training configurations<a class="headerlink" href="#training-configurations" title="Permalink to this headline">¶</a></h2>
+<p><code class="file docutils literal notranslate"><span class="pre">config_chatbot.sh</span></code> contains the flags that will be passed to launch TAO Toolkit training. Let’s create this script under the folder of Riva Skills Quick Start.</p>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd riva_quickstart:1.10.0-beta
+$ vim config_chatbot.sh
+</pre></div>
+</div>
+<p><code class="file docutils literal notranslate"><span class="pre">config_chatbot.sh</span></code>:</p>
+<div class="code text highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RIVA_MOUNTED_DATA_DIR</span><span class="o">=</span><span class="s1">&#39;/data&#39;</span>
+<span class="n">RIVA_MOUNTED_SPECS_DIR</span><span class="o">=</span><span class="s1">&#39;/specs&#39;</span>
+<span class="n">RIVA_MOUNTED_RESULTS_DIR</span><span class="o">=</span><span class="s1">&#39;/results&#39;</span>
+<span class="n">LOCAL_RESULT_DIR</span><span class="o">=&lt;</span><span class="n">local</span> <span class="n">results</span> <span class="n">folder</span><span class="o">&gt;</span>
+<span class="n">RIVA_REPO</span><span class="o">=</span><span class="s2">&quot;path/to/riva_quickstart_v1.10.0-beta&quot;</span>
+<span class="n">RIVA_SERVICE_MAKER</span><span class="o">=</span><span class="n">nvcr</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">nvidia</span><span class="o">/</span><span class="n">riva</span><span class="o">/</span><span class="n">riva</span><span class="o">-</span><span class="n">speech</span><span class="p">:</span><span class="mf">1.10</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">beta</span><span class="o">-</span><span class="n">servicemaker</span>
+<span class="n">NUM_CLASSES</span><span class="o">=&lt;</span><span class="n">number</span> <span class="n">of</span> <span class="n">intents</span> <span class="ow">in</span> <span class="n">training</span> <span class="nb">set</span><span class="o">&gt;</span>
+<span class="n">NUM_EPOCH</span><span class="o">=</span><span class="mi">500</span>
+<span class="n">NGC_API_KEY</span><span class="o">=&lt;</span><span class="n">Your</span> <span class="n">NGC</span> <span class="n">API</span> <span class="n">Key</span><span class="o">&gt;</span>
+<span class="n">ENCRYPTION_KEY</span><span class="o">=</span><span class="s2">&quot;tlt_encode&quot;</span>
+<span class="n">GPUS</span><span class="o">=</span><span class="mi">1</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><code class="file docutils literal notranslate"><span class="pre">RIVA_MOUNTED_DATA_DIR</span></code>, <code class="file docutils literal notranslate"><span class="pre">RIVA_MOUNTED_SPECS_DIR</span></code>, <code class="file docutils literal notranslate"><span class="pre">RIVA_MOUNTED_RESULTS_DIR</span></code> are defined in <code class="file docutils literal notranslate"><span class="pre">~/.tao_mounts.json</span></code>, which are to be referenced by TAO toolkit during training.</li>
+<li>Replace <code class="file docutils literal notranslate"><span class="pre">NGC_API_KEY</span></code> with your NGC API Key.</li>
+</ul>
+</div>
+<div class="section" id="model-training">
+<h2>6. Model training<a class="headerlink" href="#model-training" title="Permalink to this headline">¶</a></h2>
+<p><code class="file docutils literal notranslate"><span class="pre">train.sh</span></code> contains the model training pipelines. Create this script under the folder of Riva Skills Quick Start.</p>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>$ vim train.sh
+</pre></div>
+</div>
+<p><code class="file docutils literal notranslate"><span class="pre">train.sh</span></code>:</p>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>#!/bin/bash
+temp_result_folder_path=$RIVA_MOUNTED_RESULTS_DIR/text_classification/text_classification_0
+temp_local_result_folder_path=$LOCAL_RESULT_DIR/text_classification/text_classification_0
+
+# 1. Check count for version
+version_count=&quot;$(ls &quot;$LOCAL_RESULT_DIR/text_classification&quot; | wc -l )&quot;
+
+if [[ $version_count -ge 1 ]];
+then
+        temp_result_folder_path=$RIVA_MOUNTED_RESULTS_DIR/text_classification/text_classification_$version_count
+        temp_local_result_folder_path=$LOCAL_RESULT_DIR/text_classification/text_classification_$version_count
+fi
+
+# 2. TAO Toolkit: text classification task
+echo &quot;The TAO-trained model will be stored at $temp_local_result_folder_path (docker: $temp_result_folder_path)&quot;
+
+tao text_classification train \
+        -e $RIVA_MOUNTED_SPECS_DIR/text_classification/train.yaml \
+        -g $GPUS \
+        -k $ENCRYPTION_KEY \
+        -r $temp_result_folder_path \
+        training_ds.file_path=$RIVA_MOUNTED_DATA_DIR/dgxChatbot/text_classification/train.tsv \
+        validation_ds.file_path=$RIVA_MOUNTED_DATA_DIR/dgxChatbot/text_classification/val.tsv \
+        model.class_labels.class_labels_file=$RIVA_MOUNTED_DATA_DIR/dgxChatbot/text_classification/labels.csv \
+        model.dataset.num_classes=$NUM_CLASSES \
+        trainer.max_epochs=$NUM_EPOCH
+
+# 3. TAO Toolkit: export text classification model to RIVA format
+tao text_classification export \
+        -e &quot;$RIVA_MOUNTED_SPECS_DIR/text_classification/export.yaml&quot; \
+        -g $GPUS \
+        -m $temp_result_folder_path/checkpoints/trained-model.tlt \
+        -k $ENCRYPTION_KEY \
+        -r $temp_result_folder_path/export_riva \
+        export_format=RIVA
+
+# 4. TAO Toolkit: export RIVA format model to rmir
+docker run --gpus all --rm -v $temp_local_result_folder_path/export_riva:/servicemaker-dev \
+        -v $RIVA_REPO:/riva-repo --entrypoint=&quot;/bin/bash&quot; \
+        $RIVA_SERVICE_MAKER /riva-repo/build_rmir_nlp_tc.sh
+</pre></div>
+</div>
+<p>Execute <code class="file docutils literal notranslate"><span class="pre">train.sh</span></code> to start training:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ bash train.sh
+</pre></div>
+</div>
+<p>When training is done, we should find exported <code class="file docutils literal notranslate"><span class="pre">exported-model.riva</span></code> and <code class="file docutils literal notranslate"><span class="pre">exported-model.rmir</span></code> under <code class="file docutils literal notranslate"><span class="pre">&lt;local</span> <span class="pre">results</span> <span class="pre">folder&gt;/text_classification/text_classification_&lt;version&gt;/export_riva</span></code></p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="prereq.html" class="btn btn-neutral float-left" title="Prerequisites" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="deploy.html" class="btn btn-neutral float-right" title="Deploy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, NVAITC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+<style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search,
+    .wy-nav-top {
+        background: #76b900;
+    }
+
+
+    /* Sidebar */
+    /* .wy-nav-side {
+        background: #76b900;
+    } */
+</style>
+
+
+</body>
+</html>

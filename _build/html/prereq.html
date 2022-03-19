@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prerequisites &mdash; NVIDIA SA Virtual Assistant 1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Training" href="training.html" />
+    <link rel="prev" title="Overview" href="arch.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> NVIDIA SA Virtual Assistant
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="arch.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Prerequisites</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#docker">1. Docker</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nvidia-contianer-toolkit">NVIDIA Contianer Toolkit</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#nvidia-ai-software">2. NVIDIA AI Software</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nvidia-gpu-cloud-api">NVIDIA GPU Cloud API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nvidia-tao-toolkit">NVIDIA TAO Toolkit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nvidia-riva-skills-quick-start">NVIDIA Riva Skills Quick Start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nvidia-riva-servicemaker">NVIDIA Riva ServiceMaker</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="training.html">Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deploy.html">Deploy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frontend.html">Frontend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="samples.html">Sample Applications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NVIDIA SA Virtual Assistant</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Prerequisites</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/prereq.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="prerequisites">
+<h1>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h1>
+<p>This section contains the prerequisites for NVIDIA SA Virtual Assistant.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ol class="last arabic simple">
+<li>Only Linux environment is supported for the instructions below.</li>
+<li>You have access to a Volta, Turing, or an NVIDIA Ampere architecture-based GPU.</li>
+</ol>
+</div>
+<div class="section" id="docker">
+<h2>1. Docker<a class="headerlink" href="#docker" title="Permalink to this headline">¶</a></h2>
+<p>Docker is required for using containers in NVIDIA GPU Cloud (NGC), install <a class="reference external" href="https://docs.docker.com/engine/install/ubuntu/">here</a> if you have not.</p>
+<div class="section" id="nvidia-contianer-toolkit">
+<h3>NVIDIA Contianer Toolkit<a class="headerlink" href="#nvidia-contianer-toolkit" title="Permalink to this headline">¶</a></h3>
+<p>To enable GPUs in Docker containers, follow <a class="reference external" href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html">installation guide</a> to set up NVIDIA Container Toolkit.</p>
+</div>
+</div>
+<div class="section" id="nvidia-ai-software">
+<h2>2. NVIDIA AI Software<a class="headerlink" href="#nvidia-ai-software" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="nvidia-gpu-cloud-api">
+<h3>NVIDIA GPU Cloud API<a class="headerlink" href="#nvidia-gpu-cloud-api" title="Permalink to this headline">¶</a></h3>
+<p>Register <a class="reference external" href="https://ngc.nvidia.com/">NGC Key</a> and make sure you are able to pull containers from NGC through CLI.</p>
+</div>
+<div class="section" id="nvidia-tao-toolkit">
+<h3>NVIDIA TAO Toolkit<a class="headerlink" href="#nvidia-tao-toolkit" title="Permalink to this headline">¶</a></h3>
+<p>TAO is used to train conversational AI models to be deployed in Riva Server. Follow <a class="reference external" href="https://docs.nvidia.com/tao/tao-toolkit/text/tao_toolkit_quick_start_guide.html">TAO Toolkit Quick Start Guide</a> to setup TAO runtime.</p>
+</div>
+<div class="section" id="nvidia-riva-skills-quick-start">
+<h3>NVIDIA Riva Skills Quick Start<a class="headerlink" href="#nvidia-riva-skills-quick-start" title="Permalink to this headline">¶</a></h3>
+<p>Download Riva quick start scripts via the command-line with the NGC CLI tool:</p>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>$ ngc registry resource download-version &quot;nvidia/riva/riva_quickstart:1.10.0-beta&quot;
+</pre></div>
+</div>
+</div>
+<div class="section" id="nvidia-riva-servicemaker">
+<h3>NVIDIA Riva ServiceMaker<a class="headerlink" href="#nvidia-riva-servicemaker" title="Permalink to this headline">¶</a></h3>
+<p>Riva ServiceMaker provides handy tools to deploy trained models for Riva AI Services. Pull the container in CLI:</p>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker pull nvcr.io/nvidia/riva/riva-speech:1.10.0-beta-servicemaker
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="arch.html" class="btn btn-neutral float-left" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="training.html" class="btn btn-neutral float-right" title="Training" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, NVAITC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+<style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search,
+    .wy-nav-top {
+        background: #76b900;
+    }
+
+
+    /* Sidebar */
+    /* .wy-nav-side {
+        background: #76b900;
+    } */
+</style>
+
+
+</body>
+</html>

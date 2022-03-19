@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deploy &mdash; NVIDIA SA Virtual Assistant 1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Frontend" href="frontend.html" />
+    <link rel="prev" title="Training" href="training.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> NVIDIA SA Virtual Assistant
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="arch.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prereq.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="training.html">Training</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Deploy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#launch-rivaservice-container">1. Launch RivaService Container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deploy-models">2. Deploy models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#riva-server-configuration">3. Riva Server Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#start-riva-server">4. Start Riva Server</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="frontend.html">Frontend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="samples.html">Sample Applications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NVIDIA SA Virtual Assistant</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Deploy</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/deploy.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="deploy">
+<h1>Deploy<a class="headerlink" href="#deploy" title="Permalink to this headline">¶</a></h1>
+<p>This section describes how we can use Rive ServiceMaker tools to deploy trained models for Riva AI Serives.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This section assumes you have completed <a class="reference internal" href="training.html#training"><span class="std std-ref">Training</span></a> beforehand.</p>
+</div>
+<div class="section" id="launch-rivaservice-container">
+<h2>1. Launch RivaService Container<a class="headerlink" href="#launch-rivaservice-container" title="Permalink to this headline">¶</a></h2>
+<p>To deploy trained model <code class="file docutils literal notranslate"><span class="pre">exported-model.rmir</span></code>, we need to first launch RivaService Container:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> riva_quickstart:1.10.0-beta
+$ mkdir rmirs
+$ cp &lt;<span class="nb">local</span> results folder&gt;/text_classification/text_classification_&lt;version&gt;/export_riva/exported-model.rmir rmirs/
+$ sudo docker run -it --rm --gpus all -v<span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>:/data nvcr.io/nvidia/riva/riva-speech:1.10.0-beta-servicemaker
+</pre></div>
+</div>
+</div>
+<div class="section" id="deploy-models">
+<h2>2. Deploy models<a class="headerlink" href="#deploy-models" title="Permalink to this headline">¶</a></h2>
+<p>Inside the container, use <code class="code docutils literal notranslate"><span class="pre">riva-deploy</span></code> command to deploy <code class="code docutils literal notranslate"><span class="pre">.rmir</span></code> model to Riva model repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mkdir /data/models
+$ riva-deploy -f /data/rmirs/exported-model.rmir:tlt_encode /data/models
+</pre></div>
+</div>
+<p>When deployment is done, exit the RivaSerivce container.</p>
+</div>
+<div class="section" id="riva-server-configuration">
+<h2>3. Riva Server Configuration<a class="headerlink" href="#riva-server-configuration" title="Permalink to this headline">¶</a></h2>
+<p>In Riva Skills Quick Start directory, let’s enable deployed models:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ vim config.sh
+</pre></div>
+</div>
+<ul class="simple">
+<li>set <code class="code docutils literal notranslate"><span class="pre">service_enabled_asr=false</span></code></li>
+<li>set <code class="code docutils literal notranslate"><span class="pre">service_enabled_nlp=true</span></code></li>
+<li>set <code class="code docutils literal notranslate"><span class="pre">service_enabled_tts=false</span></code></li>
+<li>set <code class="code docutils literal notranslate"><span class="pre">riva_model_loc=&lt;path/to/riva_quickstart_v1.10.0-beta&gt;</span></code></li>
+<li>set <code class="code docutils literal notranslate"><span class="pre">use_existing_rmirs=true</span></code></li>
+</ul>
+</div>
+<div class="section" id="start-riva-server">
+<h2>4. Start Riva Server<a class="headerlink" href="#start-riva-server" title="Permalink to this headline">¶</a></h2>
+<p>Done! Now we finished our server configuration, let’s start Riva Server:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ bash riva_start.sh
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="training.html" class="btn btn-neutral float-left" title="Training" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="frontend.html" class="btn btn-neutral float-right" title="Frontend" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, NVAITC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+<style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search,
+    .wy-nav-top {
+        background: #76b900;
+    }
+
+
+    /* Sidebar */
+    /* .wy-nav-side {
+        background: #76b900;
+    } */
+</style>
+
+
+</body>
+</html>
