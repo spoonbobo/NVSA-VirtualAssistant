@@ -51,6 +51,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="deploy.html">Deploy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="frontend.html">Frontend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intent_handling.html">Unseen Intent Handling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="samples.html">Sample Applications</a></li>
 </ul>
 
@@ -194,7 +195,7 @@ $ vim &lt;local data folder&gt;/domain/text_classification/nlu.yml
 <p>Feel free to add your intents and sample data into your own <code class="file docutils literal notranslate"><span class="pre">nlu.yml</span></code>.</p>
 </div>
 <div class="section" id="data-format-conversion">
-<h2>4. Data Format Conversion<a class="headerlink" href="#data-format-conversion" title="Permalink to this headline">¶</a></h2>
+<span id="data-convert"></span><h2>4. Data Format Conversion<a class="headerlink" href="#data-format-conversion" title="Permalink to this headline">¶</a></h2>
 <p><code class="file docutils literal notranslate"><span class="pre">convert_yaml.py</span></code> converts <code class="file docutils literal notranslate"><span class="pre">nlu.yml</span></code> into TAO training format. For simplicity, create this script at the same location with <code class="file docutils literal notranslate"><span class="pre">nlu.yml</span></code>.</p>
 <p><code class="file docutils literal notranslate"><span class="pre">convert_yaml.py</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -301,7 +302,7 @@ $ vim &lt;local data folder&gt;/domain/text_classification/nlu.yml
 <p>You should see <code class="file docutils literal notranslate"><span class="pre">train.tsv</span></code>, <code class="file docutils literal notranslate"><span class="pre">val.tsv</span></code>, and <code class="file docutils literal notranslate"><span class="pre">labels.csv</span></code> are generated in the current folder. For TAO training format for text_classification task, please check <a class="reference external" href="https://docs.nvidia.com/tao/tao-toolkit/text/nlp/text_classification.html">TAO Toolkit Text Classification</a>.</p>
 </div>
 <div class="section" id="training-configurations">
-<h2>5. Training configurations<a class="headerlink" href="#training-configurations" title="Permalink to this headline">¶</a></h2>
+<span id="train-config"></span><h2>5. Training configurations<a class="headerlink" href="#training-configurations" title="Permalink to this headline">¶</a></h2>
 <p><code class="file docutils literal notranslate"><span class="pre">config_chatbot.sh</span></code> contains the flags that will be passed to launch TAO Toolkit training. Let’s create this script under the folder of Riva Skills Quick Start.</p>
 <div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd riva_quickstart:1.10.0-beta
 $ vim config_chatbot.sh

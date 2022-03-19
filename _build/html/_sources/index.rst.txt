@@ -15,5 +15,6 @@ Welcome to NVIDIA SA Virtual Assistant's documentation!
    training
    deploy
    frontend
+   intent_handling
    samples
 

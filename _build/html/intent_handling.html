@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unseen Intent Handling &mdash; NVIDIA SA Virtual Assistant 1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Sample Applications" href="samples.html" />
+    <link rel="prev" title="Frontend" href="frontend.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> NVIDIA SA Virtual Assistant
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="arch.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prereq.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="training.html">Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deploy.html">Deploy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frontend.html">Frontend</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Unseen Intent Handling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dgx-utter-txt">dgx_utter.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#labelling">Labelling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="samples.html">Sample Applications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NVIDIA SA Virtual Assistant</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Unseen Intent Handling</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/intent_handling.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="unseen-intent-handling">
+<h1>Unseen Intent Handling<a class="headerlink" href="#unseen-intent-handling" title="Permalink to this headline">¶</a></h1>
+<a class="reference internal image-reference" href="_images/Arch.jpg"><img alt="Alternative text" src="_images/Arch.jpg" style="width: 800px;" /></a>
+<p>It’s common for the virtual Assistant to come across with unseen intents, which might fail the queries answering. NVIDIA SA Virtual Assistant collects user queries in tsv format (which is compatible with TAO training format).</p>
+<div class="section" id="dgx-utter-txt">
+<h2>dgx_utter.txt<a class="headerlink" href="#dgx-utter-txt" title="Permalink to this headline">¶</a></h2>
+<p>Take DGX Chatbot frontend implementation <a class="reference internal" href="frontend.html#frontend"><span class="std std-ref">Frontend</span></a> as example, the incoming queries to chatbot is stored at <code class="code docutils literal notranslate"><span class="pre">dgxUtter/dgx_utter.txt</span></code>.</p>
+<p>A sample piece from <code class="file docutils literal notranslate"><span class="pre">dgxUtter/dgx_utter.txt</span></code>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>what is mig?
+pcie?
+network config for dgx
+my fan is broken, how to repair?
+my drive is not working, how to fix
+</pre></div>
+</div>
+<p>Notice that some of them may be in assistant’s capacity, while some do not.</p>
+</div>
+<div class="section" id="labelling">
+<h2>Labelling<a class="headerlink" href="#labelling" title="Permalink to this headline">¶</a></h2>
+<p>Following the TAO Toolkit training format, for each line of <code class="file docutils literal notranslate"><span class="pre">dgxUtter/dgx_utter.txt</span></code>, we label them in following syntax <code class="code docutils literal notranslate"><span class="pre">&lt;query&gt;&lt;tab&gt;&lt;label&gt;</span></code>.</p>
+<p>There are basically 2 possible cases: first, the label is seen before, then we can label it referring to <code class="file docutils literal notranslate"><span class="pre">labels.csv</span></code> previously generated (see <a class="reference internal" href="training.html#data-convert"><span class="std std-ref">4. Data Format Conversion</span></a>), and add it back in <code class="file docutils literal notranslate"><span class="pre">nlu.yml</span></code> or manually append to <code class="file docutils literal notranslate"><span class="pre">train.tsv</span></code> or <code class="file docutils literal notranslate"><span class="pre">val.tsv</span></code>.</p>
+<p>Otherwise, this is unseen label, then we should 1) create a new intent in <code class="file docutils literal notranslate"><span class="pre">nlu.yml</span></code> and pass in the collected query 2) Update <code class="code docutils literal notranslate"><span class="pre">NUM_CLASSES</span></code> in <code class="file docutils literal notranslate"><span class="pre">config_chatbot.sh</span></code> (see <a class="reference internal" href="training.html#train-config"><span class="std std-ref">5. Training configurations</span></a>) after adding new intent.</p>
+<p>In both cases, if new data is passed into <code class="file docutils literal notranslate"><span class="pre">nlu.yml</span></code>, we should re-run <code class="file docutils literal notranslate"><span class="pre">convert_yaml.py</span></code> mentioned in <a class="reference internal" href="training.html#data-convert"><span class="std std-ref">4. Data Format Conversion</span></a> to generate new TAO training files.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="frontend.html" class="btn btn-neutral float-left" title="Frontend" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="samples.html" class="btn btn-neutral float-right" title="Sample Applications" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, NVAITC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+<style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search,
+    .wy-nav-top {
+        background: #76b900;
+    }
+
+
+    /* Sidebar */
+    /* .wy-nav-side {
+        background: #76b900;
+    } */
+</style>
+
+
+</body>
+</html>

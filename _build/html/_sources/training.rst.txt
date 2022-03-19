@@ -128,6 +128,8 @@ Let's add sample intents in :file:`nlu.yml`:
     
 Feel free to add your intents and sample data into your own :file:`nlu.yml`.
 
+.. _data_convert:
+
 4. Data Format Conversion
 -------------------------
 :file:`convert_yaml.py` converts :file:`nlu.yml` into TAO training format. For simplicity, create this script at the same location with :file:`nlu.yml`.
@@ -241,6 +243,8 @@ Use :file:`convert_yaml.py` to convert our :file:`nlu.yml`:
     $ python3 convert_yaml.py --dd <local data folder> --yf domain/text_classification --tr 0.8 --shuffle
 
 You should see :file:`train.tsv`, :file:`val.tsv`, and :file:`labels.csv` are generated in the current folder. For TAO training format for text_classification task, please check `TAO Toolkit Text Classification <https://docs.nvidia.com/tao/tao-toolkit/text/nlp/text_classification.html>`_.
+
+.. _train_config:
 
 5. Training configurations
 --------------------------
