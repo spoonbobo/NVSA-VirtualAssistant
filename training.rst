@@ -76,55 +76,14 @@ Download specification files which contain parameter configurations for subtasks
 
         ....
 
-Create :file:`nlu.yml` under :file:`<local data folder>/domain/text_classification/`:
+Create file *nlu.yml* and copy the content of :ref:`nluyml` under :file:`<local data folder>/domain/text_classification/`:
 
 .. code:: bash
 
     $ mkdir -p <local data folder>/domain/text_classification/
     $ vim <local data folder>/domain/text_classification/nlu.yml
 
-Let's add sample intents in :file:`nlu.yml`:
 
-.. code-block:: yaml
-
-    nlu:
-        - intent: ask_dgx_a100_pcie_gen4
-        examples: |
-            - pci express dgx a100
-            - PCIe bandth
-            - PCI switch infrastructure
-            - PCIe gen4
-            - dgxa100 pcie
-            - dgxa100 switch infrastructure
-
-        - intent: ask_dgx_a100_m2_nvme_boot_replace
-        examples: |
-            - replace boot drive dgx a100
-            - change drive for boot dgx a100
-            - steps to replace boot drive for dgx a100
-            - replace nvme for dgx a100 start up
-            - m2 nvme on dgx a100 boot replace
-            - detach dgx a100 boot drive
-
-        - intent: ask_dgx_a100_upgrade_dimm
-        examples: |
-            - additional dimms dgx a100
-            - add dimms dgx a100
-            - 16 additional dual-inline memory modules
-            - how to add dimms
-            - how to upgrade diims
-            - upgrade diims
-            - extra dimms
-
-        - intent: ask_dgx_air_gapped
-        examples: |
-            - dgx installation isolated from networks
-            - air-gapped dgx systems
-            - air-gapped for security dgx
-            - isolated dgx systems
-            - update software on airgapped dgx systems
-            - how to update packages on dgx using over-the-network method
-            - air gapped dgx over the network
     
 Feel free to add your intents and sample data into your own :file:`nlu.yml`.
 
@@ -132,103 +91,7 @@ Feel free to add your intents and sample data into your own :file:`nlu.yml`.
 
 4. Data Format Conversion
 -------------------------
-:file:`convert_yaml.py` converts :file:`nlu.yml` into TAO training format. For simplicity, create this script at the same location with :file:`nlu.yml`.
-
-:file:`convert_yaml.py`:
-
-.. code-block:: python
-
-    import os
-    import yaml
-    import re
-    import random
-    import argparse
-    from yaml import load, dump
-    try:
-        from yaml import CLoader as Loader, CDumper as Dumper
-    except ImportError:
-        from yaml import Loader, Dumper
-
-    def process_text_tc(x):
-        x = x[2:]
-        x = x.replace("[", "")
-        x = x.replace("]", "")
-        return re.sub("[\(\[].*?[\)\]]", "", x)
-
-    def read_yaml(yamlFile, taskName):
-        with open(yamlFile, "r") as f:
-            data = yaml.safe_load(f)
-        return data[taskName]
-
-    def convert_yaml(dataDir, yamlFileList, resTrainPath, resValPath, labelPath, trainRatio, shuffleData):
-
-        open(resTrainPath, "w").close()
-        open(resValPath, "w").close()
-        open(labelPath, "w").close()
-
-        data = []
-        for yamlFile in yamlFileList:
-            yamlFilePath = os.path.join(dataDir, yamlFile, "nlu.yml")
-            data += read_yaml(yamlFilePath, 'nlu')
-
-        with open(resTrainPath, "a") as train_f:
-            with open(resValPath, "a") as val_f:
-                with open(labelPath, "a") as label_f:
-                    trainData, valData, labels = [], [], []
-                    for intentIdx in range(len(data)):
-                        labels.append(data[intentIdx]["intent"])
-                        examples = data[intentIdx]['examples'].split("\n")
-                        examplesNoDash = list(map(process_text_tc, examples))[:-1]
-                        numTrainData = int(len(examplesNoDash) * trainRatio)
-                        for expIdx in range(len(examplesNoDash)):
-                            line = examplesNoDash[expIdx] + '\t' + str(intentIdx)
-                            if expIdx < numTrainData:
-                                trainData.append(line)
-                            else:
-                                valData.append(line)
-                    if shuffleData:
-                        random.shuffle(trainData)
-                        random.shuffle(valData)
-                    label_f.write("\n".join(labels))
-                    train_f.write("\n".join(trainData))
-                    val_f.write("\n".join(valData))
-
-    if __name__ == '__main__':
-        parser = argparse.ArgumentParser()
-        parser.add_argument("--dd", "--data_dir", help="path to data dir", type=str)
-        parser.add_argument("--yf", "--yaml_file", nargs='+', help="path to yaml file", required=True)
-        parser.add_argument("--tm", "--train_manifest", help="result train manifest", type=str)
-        parser.add_argument("--vm", "--val_manifest", help="result val manifest", type=str)
-        parser.add_argument("--lb", "--label_file", help="label file", type=str)
-        parser.add_argument("--tr", "--train_ratio", help="train manifest ratio", type=float)
-        parser.add_argument("--shuffle", help="shuffle data", action="store_true")
-
-        args = parser.parse_args()
-
-        if not args.dd:
-            print("no data dir is specified. set current folder as default.")
-            args.dd = os.getcwd()
-
-        if not args.yf:
-            print("you must provide at least 1 yaml file to use this script.")
-            exit()
-
-        if not args.tm:
-            args.tm = "train.tsv"
-
-        if not args.vm:
-            args.vm = "val.tsv"
-
-        if not args.lb:
-            args.lb = 'labels.csv'
-
-        if not args.tr:
-            args.tr = 0.8
-
-        if not args.shuffle:
-            args.shuffle = False
-
-        convert_yaml(args.dd, args.yf, args.tm, args.vm, args.lb, args.tr, args.shuffle)
+:ref:`convertyaml` converts :file:`nlu.yml` into TAO training format. For simplicity, copy :ref:`convertyaml` this script at the same location with :file:`nlu.yml`.
 
 The syntax of :file:`convert_yaml.py` is as follows:
 
@@ -242,7 +105,7 @@ Use :file:`convert_yaml.py` to convert our :file:`nlu.yml`:
 
     $ python3 convert_yaml.py --dd <local data folder> --yf domain/text_classification --tr 0.8 --shuffle
 
-You should see :file:`train.tsv`, :file:`val.tsv`, and :file:`labels.csv` are generated in the current folder. For TAO training format for text_classification task, please check `TAO Toolkit Text Classification <https://docs.nvidia.com/tao/tao-toolkit/text/nlp/text_classification.html>`_.
+You should see :file:`train.tsv`, :file:`val.tsv`, and :file:`labels.csv` are generated in the current folder.
 
 .. _train_config:
 
@@ -276,56 +139,8 @@ You should see :file:`train.tsv`, :file:`val.tsv`, and :file:`labels.csv` are ge
 
 6. Model training
 -----------------
-:file:`train.sh` contains the model training pipelines. Create this script under the folder of Riva Skills Quick Start.
 
-.. code:: bash
-
-    $ vim train.sh
-
-:file:`train.sh`:
-
-.. code:: bash
-
-    #!/bin/bash
-    temp_result_folder_path=$RIVA_MOUNTED_RESULTS_DIR/text_classification/text_classification_0
-    temp_local_result_folder_path=$LOCAL_RESULT_DIR/text_classification/text_classification_0
-
-    # 1. Check count for version
-    version_count="$(ls "$LOCAL_RESULT_DIR/text_classification" | wc -l )"
-
-    if [[ $version_count -ge 1 ]];
-    then
-            temp_result_folder_path=$RIVA_MOUNTED_RESULTS_DIR/text_classification/text_classification_$version_count
-            temp_local_result_folder_path=$LOCAL_RESULT_DIR/text_classification/text_classification_$version_count
-    fi
-
-    # 2. TAO Toolkit: text classification task
-    echo "The TAO-trained model will be stored at $temp_local_result_folder_path (docker: $temp_result_folder_path)"
-
-    tao text_classification train \
-            -e $RIVA_MOUNTED_SPECS_DIR/text_classification/train.yaml \
-            -g $GPUS \
-            -k $ENCRYPTION_KEY \
-            -r $temp_result_folder_path \
-            training_ds.file_path=$RIVA_MOUNTED_DATA_DIR/dgxChatbot/text_classification/train.tsv \
-            validation_ds.file_path=$RIVA_MOUNTED_DATA_DIR/dgxChatbot/text_classification/val.tsv \
-            model.class_labels.class_labels_file=$RIVA_MOUNTED_DATA_DIR/dgxChatbot/text_classification/labels.csv \
-            model.dataset.num_classes=$NUM_CLASSES \
-            trainer.max_epochs=$NUM_EPOCH
-
-    # 3. TAO Toolkit: export text classification model to RIVA format
-    tao text_classification export \
-            -e "$RIVA_MOUNTED_SPECS_DIR/text_classification/export.yaml" \
-            -g $GPUS \
-            -m $temp_result_folder_path/checkpoints/trained-model.tlt \
-            -k $ENCRYPTION_KEY \
-            -r $temp_result_folder_path/export_riva \
-            export_format=RIVA
-
-    # 4. TAO Toolkit: export RIVA format model to rmir
-    docker run --gpus all --rm -v $temp_local_result_folder_path/export_riva:/servicemaker-dev \
-            -v $RIVA_REPO:/riva-repo --entrypoint="/bin/bash" \
-            $RIVA_SERVICE_MAKER /riva-repo/build_rmir_nlp_tc.sh
+:ref:`train` contains the model training pipelines. Copy :ref:`train` under the folder of Riva Skills Quick Start.
 
 Execute :file:`train.sh` to start training:
 

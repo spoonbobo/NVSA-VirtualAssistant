@@ -1,7 +1,7 @@
 Unseen Intent Handling
 ======================
 
-.. image:: _static/css/img/Arch.jpg
+.. image:: _static/css/img/archupdate.jpg
   :width: 800
   :alt: Alternative text
 
