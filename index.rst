@@ -17,4 +17,5 @@ Welcome to NVIDIA SA Virtual Assistant's documentation!
    frontend
    intent_handling
    samples
+   ref
 
