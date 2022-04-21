@@ -10,99 +10,99 @@ nlu.yml
 
     nlu:
         - intent: ask_dgx_a100_pcie_gen4
-        examples: |
-            - pci express dgx a100
-            - PCIe bandth
-            - PCI switch infrastructure
-            - PCIe gen4
-            - dgxa100 pcie
-            - dgxa100 switch infrastructure
+          examples: |
+              - pci express dgx a100
+              - PCIe bandth
+              - PCI switch infrastructure
+              - PCIe gen4
+              - dgxa100 pcie
+              - dgxa100 switch infrastructure
 
         - intent: ask_dgx_a100_m2_nvme_boot_replace
-        examples: |
-            - replace boot drive dgx a100
-            - change drive for boot dgx a100
-            - steps to replace boot drive for dgx a100
-            - replace nvme for dgx a100 start up
-            - m2 nvme on dgx a100 boot replace
-            - detach dgx a100 boot drive
+          examples: |
+              - replace boot drive dgx a100
+              - change drive for boot dgx a100
+              - steps to replace boot drive for dgx a100
+              - replace nvme for dgx a100 start up
+              - m2 nvme on dgx a100 boot replace
+              - detach dgx a100 boot drive
 
         - intent: ask_dgx_a100_upgrade_dimm
-        examples: |
-            - additional dimms dgx a100
-            - add dimms dgx a100
-            - 16 additional dual-inline memory modules
-            - how to add dimms
-            - how to upgrade diims
-            - upgrade diims
-            - extra dimms
+          examples: |
+              - additional dimms dgx a100
+              - add dimms dgx a100
+              - 16 additional dual-inline memory modules
+              - how to add dimms
+              - how to upgrade diims
+              - upgrade diims
+              - extra dimms
 
         - intent: ask_dgx_air_gapped
-        examples: |
-            - dgx installation isolated from networks
-            - air-gapped dgx systems
-            - air-gapped for security dgx
-            - isolated dgx systems
-            - update software on airgapped dgx systems
-            - how to update packages on dgx using over-the-network method
-            - air gapped dgx over the network
+          examples: |
+              - dgx installation isolated from networks
+              - air-gapped dgx systems
+              - air-gapped for security dgx
+              - isolated dgx systems
+              - update software on airgapped dgx systems
+              - how to update packages on dgx using over-the-network method
+              - air gapped dgx over the network
 
         - intent: ask_dgx_a100_nvme
-        examples: |
-            - dgxa100 system nvme
-            - dgxa100 ssds
-            - dgxa100 read data speed
-            - dgx a100 system volume
-            - dgxa100 hard disk
-            - dgx a100 network data transfer
+          examples: |
+              - dgxa100 system nvme
+              - dgxa100 ssds
+              - dgxa100 read data speed
+              - dgx a100 system volume
+              - dgxa100 hard disk
+              - dgx a100 network data transfer
 
         - intent: ask_dgx_a100_software_stack
-        examples: |
-            - software stack dgx a100
-            - dgx deep learning frameworks
-            - SDK software dgx a100
-            - NGC containers with dgx a100
-            - dgxa100 DL containers
-            - dgx a100 system ML containers
-            - ML DL containers in dgd a100 system 
+          examples: |
+              - software stack dgx a100
+              - dgx deep learning frameworks
+              - SDK software dgx a100
+              - NGC containers with dgx a100
+              - dgxa100 DL containers
+              - dgx a100 system ML containers
+              - ML DL containers in dgd a100 system 
 
         - intent: ask_nvidia_container_toolkit
-        examples: |
-            - NVIDIA container toolkit
-            - nv container toolkit
-            - nvidia docker
-            - NVIDIA container runtime library
-            - docker leverage nvidia gpu
-            - gpu accelerated docker
-            - gpu docker
+          examples: |
+              - NVIDIA container toolkit
+              - nv container toolkit
+              - nvidia docker
+              - NVIDIA container runtime library
+              - docker leverage nvidia gpu
+              - gpu accelerated docker
+              - gpu docker
 
         - intent: ask_nvidia_cuda_toolkit
-        examples: |
-            - nvidia cuda toolkit
-            - cuda 11
-            - cuda 10
-            - cuda toolkit
-            - cuda liraris
-            - create GPU-accelerated applications
-            - accelerated applications
+          examples: |
+              - nvidia cuda toolkit
+              - cuda 11
+              - cuda 10
+              - cuda toolkit
+              - cuda liraris
+              - create GPU-accelerated applications
+              - accelerated applications
 
         - intent: ask_dgx_front_fan_replace
-        examples: |
-            - replace front fan dgx
-            - check front fan status dgx
-            - identify failed fan
-            - change the front fan
-            - add new fan module
-            - fan working properly
+          examples: |
+              - replace front fan dgx
+              - check front fan status dgx
+              - identify failed fan
+              - change the front fan
+              - add new fan module
+              - fan working properly
 
         - intent: ask_dgx_power_supply
-        examples: |
-            - replace power supply dgx
-            - identify failed power supply
-            - how to get power supply?
-            - how to replace power supply
-            - how to remove and add power supply
-            - failed power supply
+          examples: |
+              - replace power supply dgx
+              - identify failed power supply
+              - how to get power supply?
+              - how to replace power supply
+              - how to remove and add power supply
+              - failed power supply
 
 
 .. _convertyaml:

@@ -63,16 +63,16 @@ Download specification files which contain parameter configurations for subtasks
 
     nlu:
         - intent: intent1
-        examples: |
-            - utterance 1
-            - utterance 2
-            - utterance 3
+            examples: |
+                - utterance 1
+                - utterance 2
+                - utterance 3
         
         - intent: intent2
-        examples: |
-            - utterance 1
-            - utterance 2
-            - utterance 3
+            examples: |
+                - utterance 1
+                - utterance 2
+                - utterance 3
 
         ....
 
