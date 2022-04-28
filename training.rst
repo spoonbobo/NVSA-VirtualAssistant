@@ -76,12 +76,12 @@ Download specification files which contain parameter configurations for subtasks
 
         ....
 
-Create file *nlu.yml* and copy the content of :ref:`nluyml` under :file:`<local data folder>/domain/text_classification/`:
+Create file *nlu.yml* and copy the content of :ref:`nluyml` under :file:`<local data folder>/<domain>/text_classification/` where :code:`domain` represents field of focus for the queries:
 
 .. code:: bash
 
-    $ mkdir -p <local data folder>/domain/text_classification/
-    $ vim <local data folder>/domain/text_classification/nlu.yml
+    $ mkdir -p <local data folder>/<domain>/text_classification/
+    $ vim <local data folder>/<domain>/text_classification/nlu.yml
 
 
     
@@ -125,6 +125,7 @@ You should see :file:`train.tsv`, :file:`val.tsv`, and :file:`labels.csv` are ge
     RIVA_MOUNTED_DATA_DIR='/data'
     RIVA_MOUNTED_SPECS_DIR='/specs'
     RIVA_MOUNTED_RESULTS_DIR='/results'
+    DOMAIN=<your domain specified in the third step>
     LOCAL_RESULT_DIR=<local results folder>
     RIVA_REPO="path/to/riva_quickstart_v1.10.0-beta"
     RIVA_SERVICE_MAKER=nvcr.io/nvidia/riva/riva-speech:1.10.0-beta-servicemaker
